@@ -1,0 +1,23 @@
+# The reverse proxy I am going to use for most of my applications.
+---
+
+services:
+
+  cloudflared:
+    container_name: cloudflare-tunnel
+    hostname: cloudflare-tunnel
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    restart: unless-stopped
+    environment:
+      CLOUDFLARE_TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
+    networks:
+      - proxymesh
+      - default
+      
+
+networks:
+  default:
+    name: cloudflare-tunnel-network
+  proxymesh:
+    external: true
